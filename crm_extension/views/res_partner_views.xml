@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_res_partner_form_inherit_social" model="ir.ui.view">
+            <field name="name">res.partner.form.social</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <page name="internal_notes" position="after">
+                    <page string="Social Networks">
+                        <div>
+                            <i class="fa fa-2x fa-facebook m-1 o_editable_media" title="Facebook"/>
+                            <field name="facebook_url" widget='url'/>
+                        </div>
+                        <div>
+                            <i class="fa fa-2x fa-linkedin m-1 o_editable_media" title="LinkedIn"/>
+                            <field name="linkedin_url" widget='url'/>
+                        </div>
+                        <div>
+                            <i class="fa fa-2x fa-twitter m-1 o_editable_media" title="Twitter"/>
+                            <field name="twitter_url" widget='url'/>
+                        </div>
+
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="res_partner_kanban_view_inherit" model="ir.ui.view">
+            <field name="name">res.partner.view.kanban.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_record_bottom']" position="before">
+                    <div class="oe_kanban_bottom_left">
+                        <span t-if="record.is_profile_complete.raw_value">
+                            <field name="is_profile_complete" widget='boolean'/>
+                            Profile Complete
+                        </span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_res_partner_search_inherit" model="ir.ui.view">
+            <field name="name">res.partner.search.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter name="inactive" position="after">
+                    <filter name="is_profile_complete" string="Profile incomplete" domain="[('is_profile_complete','!=', True)]"/>
+                </filter>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="customer_promotion_template" name="Customer Promotion">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1 style="text-align: center">Our Promoted Customers</h1>
+                    <form method="GET" class="mb-6">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search customers..." aria-label="Search customers"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <t t-foreach="customers" t-as="customer">
+                            <div class="col-md-3">
+                                <div class="oe_partner_image">
+                                    <img t-if="customer.image_128" t-att-src="'data:image/png;base64,%s' % customer.image_128.decode()" class="img-fluid" style="border-radius: 240px;box-shadow: 0 0 26px rgba(0, 0, 0, 0.2);margin-bottom: 1px;"/>
+                                </div>
+                                <h5 t-field="customer.name"/>
+                                <p>
+                                    <a t-att-href="customer.facebook_url" target="_blank"><i class="fa fa-facebook"/></a>
+                                    <a t-att-href="customer.linkedin_url" target="_blank"><i class="fa fa-linkedin"/></a>
+                                    <a t-att-href="customer.twitter_url" target="_blank"><i class="fa fa-twitter"/></a>
+                                </p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="menu_customer_promotion" model="website.menu">
+        <field name="name">Promoted Customers</field>
+        <field name="url">/customers/promotion</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">61</field>
+    </record>
+
+    <record id="email_template_customer_promotion_followup" model="mail.template">
+        <field name="name">Customer Promotion Follow-Up</field>
+        <field name="email_from">${object.company_id.email}</field>
+        <field name="subject">Thanks for checking out our promotions!</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="body_html">
+            <![CDATA[
+            <p>Hello ${object.name},</p>
+            <p>Thank you for showing interest in our promotions. We thought you might like to see more deals we have for you!</p>
+            <p>Check them out <a href="/customers/promotion">here</a>.</p>
+            <p>Best regards,<br/>${object.company_id.name}</p>
+        ]]>
+        </field>
+    </record>
+
+</odoo>
